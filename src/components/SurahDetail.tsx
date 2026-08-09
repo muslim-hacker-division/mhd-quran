@@ -158,7 +158,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
       )}
 
       {/* Daftar ayat */}
-      {detail.ayat.map((ayah) => (
+      {(detail.ayat || []).map((ayah) => (
         <AyatCard
           key={ayah.nomorAyat}
           ayah={ayah}
