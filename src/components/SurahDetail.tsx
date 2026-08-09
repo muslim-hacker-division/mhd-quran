@@ -5,11 +5,10 @@ import { AyatCard } from './AyatCard';
 
 interface SurahDetailProps {
   nomor: number;
-  onBack: () => void;
   onSelectSurah: (nomor: number) => void;
 }
 
-export function SurahDetail({ nomor, onBack, onSelectSurah }: SurahDetailProps) {
+export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
   const [detail, setDetail] = useState<SurahDetailType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -164,7 +163,10 @@ export function SurahDetail({ nomor, onBack, onSelectSurah }: SurahDetailProps) 
           key={ayah.nomorAyat}
           ayah={ayah}
           isPlaying={playingAyah === ayah.nomorAyat}
-          onPlay={() => playAyah(ayah.nomorAyat, ayah.audio['05'])}
+          onPlay={() => {
+          const url = ayah.audio['05'];
+          if (url) playAyah(ayah.nomorAyat, url);
+          }}
           tafsirText={tafsirMap.get(ayah.nomorAyat)}
           isTafsirOpen={expandedTafsir === ayah.nomorAyat}
           onToggleTafsir={() => toggleTafsir(ayah.nomorAyat)}
