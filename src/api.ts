@@ -23,5 +23,10 @@ export async function fetchTafsir(nomor: number): Promise<TafsirAyat[]> {
   const res = await fetch(`${BASE_URL}/tafsir/${nomor}`);
   if (!res.ok) throw new Error('Gagal memuat tafsir');
   const json = await res.json();
-  return json.data as TafsirAyat[];
+  const data = json.data;
+
+  /* API kadang mengembalikan array, kadang objek */
+  if (Array.isArray(data)) return data;
+  if (data && typeof data === 'object') return Object.values(data) as TafsirAyat[];
+  return [];
 }
