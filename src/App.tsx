@@ -62,7 +62,6 @@ export default function App() {
         ) : (
           <SurahDetail
             nomor={view.surahNumber}
-            onBack={goBack}
             onSelectSurah={openSurah}
           />
         )}
