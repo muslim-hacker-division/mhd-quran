@@ -164,7 +164,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
           ayah={ayah}
           isPlaying={playingAyah === ayah.nomorAyat}
           onPlay={() => {
-          const url = ayah.audio['05'];
+          const url = ayah.audio['04'];
           if (url) playAyah(ayah.nomorAyat, url);
           }}
           tafsirText={tafsirMap.get(ayah.nomorAyat)}
