@@ -32,7 +32,7 @@ export const Header = memo(function Header({ onLogoClick, showBack, onBack }: He
             }
           }}
         >
-          <div className="brand-icon">MHD</div>
+          <img src="/logoMHD.png" alt="Logo MHD" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
           <div className="brand-text">QUR<span>'</span>AN</div>
         </div>
       </div>
