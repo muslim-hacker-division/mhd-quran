@@ -3,8 +3,8 @@ import type { Ayat } from '../types';
 
 interface AyatCardProps {
   ayah: Ayat;
-  isPlaying: boolean;
-  onPlay: () => void;
+  isPlaying?: boolean;       // <-- tambahkan tanda ? di sini
+  onPlay?: () => void;       // <-- tambahkan tanda ? di sini
   tafsirText?: string;
   isTafsirOpen: boolean;
   onToggleTafsir: () => void;
