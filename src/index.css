@@ -985,8 +985,8 @@ body::after {
   }
 }
 
-/* ========== HOME MENU GRID ========== */
-.menu-grid {
+/* ========== HOME MENU GRID DIHAPUS ========== */
+/*.menu-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
@@ -1027,7 +1027,7 @@ body::after {
   font-size: 15px;
   font-weight: 600;
   color: var(--accent);
-}
+} */
 
 /* ========== CONTENT LIST (DOA & DZIKIR) ========== */
 .page-title {
@@ -1134,4 +1134,59 @@ body::after {
 .tab-btn:not(.active):hover {
   color: var(--text);
   background: var(--bg-card-hover);
+}
+
+/* ========== STICKY MENU (4 ITEM KECIL) ========== */
+.sticky-menu {
+  position: sticky;
+  top: 56px; /* Sesuaikan tinggi header kamu (mobile 56px, desktop 64px) */
+  z-index: 50;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 12px 0;
+  margin-bottom: 24px;
+  background: rgba(8, 8, 15, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.sticky-menu button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sticky-menu button:hover {
+  color: var(--text-secondary);
+}
+
+.sticky-menu button.active {
+  color: var(--accent);
+  background: var(--accent-glow);
+  border-color: rgba(0, 255, 102, 0.15);
+}
+
+.sm-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* Atur ulang tinggi sticky menu jika di layar besar */
+@media (min-width: 768px) {
+  .sticky-menu {
+    top: 64px; /* Tinggi header desktop */
+  }
 }
