@@ -1,29 +1,36 @@
-// Hapus DzikirItem dan DzikirData yang lama, ganti dengan ini:
-
-export interface DzikirItemUnified {
+export interface Surah {
   nomor: number;
   nama: string;
-  judul?: string;       
-  arab: string;
+  namaLatin: string;
+  jumlahAyat: number;
+  tempatTurun: string;
   arti: string;
-  terjemah?: string;    
-  faedah?: string;
-  keterangan?: string;
-  ketentuan_baca?: string; 
-  surat?: Array<{       
-    nama: string;
-    arab: string;
-    terjemah: string;
-  }>;
-  pahala_berlimpah?: string;
+  deskripsi: string;
+  audioFull: Record<string, string>;
 }
 
-export interface DzikirFullFormat {
-  judul: string;
-  mukaddimah: {
-    teks_arab: string;
-    arti: string;
+export interface Ayat {
+  nomorAyat: number;
+  teksArab: string;
+  teksLatin: string;
+  teksIndonesia: string;
+  audio: Record<string, string>;
+}
+
+export interface SurahDetail extends Surah {
+  ayat: Ayat[];
+  next: { nomor: number; namaLatin: string; nama: string } | null;
+  prev: { nomor: number; namaLatin: string; nama: string } | null;
+}
+
+export interface TafsirAyat {
+  nomorAyat: number;
+  teks: string;
+  tafsir: {
+    id: string;
+    kemenag: {
+      short: string;
+      long: string;
+    };
   };
-  dzikir: DzikirItemUnified[];
-  catatan_kaki: string;
 }
