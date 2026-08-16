@@ -38,3 +38,18 @@ export interface TafsirAyat {
     };
   };
 }
+
+export interface DoaItem {
+  nama: string;
+  arab: string;
+  latin: string;
+  terjemahan: string;
+  sumber: string;
+}
+
+export interface DzikirItem {
+  nama: string;
+  arab: string;
+  latin: string;
+  terjemahan: string;
+}
