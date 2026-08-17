@@ -1,6 +1,6 @@
 <div align="center">
 
-# 💀 MHD-QURAN // SECURE DIGITAL INTERFACE 💀
+# 📖 MHD-QURAN // SECURE DIGITAL INTERFACE 📖
 
 <p align="center">
   <img src="https://img.shields.io/badge/STATUS-ACTIVE-00ff66?style=for-the-badge&logo=cyberchef&logoColor=00ff66&color=050505" alt="Status">
