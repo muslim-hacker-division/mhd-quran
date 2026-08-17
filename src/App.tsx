@@ -8,8 +8,8 @@ import { Footer } from './components/Footer';
 
 // Import JSON
 import doaData from './doa_harian.json';
-import pagiDataRaw from './dzikir_pagi.json';
-import soreDataRaw from './dzikir_petang.json';
+import pagiDataRaw from './dzikir_pagi_up.json';
+import soreDataRaw from './dzikir_petang_up.json';
 
 // Types Sementara
 interface DoaItem { nama: string; arab: string; latin: string; terjemahan: string; sumber: string; }
