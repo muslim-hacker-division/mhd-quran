@@ -89,7 +89,7 @@ export default function App() {
               <img src="/icon-dzikir.png" alt="Dzikir" className="sm-icon-img" />
               <span>Dzikir</span>
             </button>
-            <button onClick={() => window.open('https://saweria.co/@MHDmedia', '_blank')}>
+            <button onClick={() => window.open('https://saweria.co/MHDmedia', '_blank')}>
               <img src="/icon-donasi.png" alt="Donasi" className="sm-icon-img" />
               <span>Donasi</span>
             </button>
