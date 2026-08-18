@@ -1190,3 +1190,56 @@ body::after {
     top: 64px; /* Tinggi header desktop */
   }
 }
+
+/* ========== LIGHT MODE ========== */
+.app.light-mode {
+  --bg: #f4f4f8;
+  --bg-secondary: #eaeaef;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8f8fc;
+  --border: #e0e0e5;
+  --border-glow: rgba(0, 153, 68, 0.3);
+  --accent: #009944; /* Hijau lebih gelap supaya tidak silau di latar terang */
+  --accent-soft: #008838;
+  --accent-glow: rgba(0, 153, 68, 0.08);
+  --accent-glow-md: rgba(0, 153, 68, 0.15);
+  --accent-glow-strong: rgba(0, 153, 68, 0.3);
+  --text: #1a1a2e;
+  --text-secondary: #555566;
+  --text-muted: #888899;
+  --danger: #ff2244;
+  /* Menutupi background gelap dari body */
+  background-color: var(--bg); 
+}
+
+.app.light-mode .header {
+  background: rgba(244, 244, 248, 0.85);
+  border-bottom-color: var(--border);
+}
+
+.app.light-mode .sticky-menu {
+  background: rgba(244, 244, 248, 0.92);
+  border-bottom-color: var(--border);
+}
+
+/* ========== STICKY MENU ICON (PNG) ========== */
+.sm-icon-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  transition: var(--transition);
+  filter: grayscale(100%) opacity(0.6); /* Biar default abu-abu */
+}
+
+.sticky-menu button:hover .sm-icon-img {
+  filter: grayscale(0%) opacity(1);
+}
+
+.sticky-menu button.active .sm-icon-img {
+  filter: grayscale(0%) opacity(1) brightness(0) invert(31%) sepia(100%) saturate(1500%) hue-rotate(104deg) brightness(95%) contrast(101%); /* Otomatis jadi warna accent */
+}
+
+/* Light mode khusus ikon active (karena warna accent beda) */
+.app.light-mode .sticky-menu button.active .sm-icon-img {
+  filter: grayscale(0%) opacity(1) brightness(0) invert(38%) sepia(98%) saturate(1500%) hue-rotate(106deg) brightness(96%) contrast(95%);
+   }
