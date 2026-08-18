@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import type { Surah } from './types';
 import { fetchAllSurahs } from './api';
 import { Header } from './components/Header';
@@ -26,7 +26,6 @@ const doaList = doaData as DoaItem[];
 const pagi = normalizeData(pagiDataRaw as DzikirRaw);
 const sore = normalizeData(soreDataRaw as DzikirRaw);
 
-// View tidak ada 'home' lagi, langsung 'quran-list'
 type View = { type: 'quran-list' } | { type: 'quran-detail'; surahNumber: number } | { type: 'doa' } | { type: 'dzikir' };
 
 export default function App() {
@@ -35,6 +34,8 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'pagi' | 'sore'>('pagi');
+  const [searchDoa, setSearchDoa] = useState('');
+  const [isLightMode, setIsLightMode] = useState(false);
 
   useEffect(() => { loadSurahs(); }, []);
 
@@ -44,9 +45,11 @@ export default function App() {
     finally { setLoading(false); }
   };
 
+  const toggleTheme = useCallback(() => { setIsLightMode((prev) => !prev); }, []);
+
   const handleNavigate = useCallback((page: 'quran' | 'doa' | 'dzikir') => {
     if (page === 'quran') setView({ type: 'quran-list' });
-    if (page === 'doa') setView({ type: 'doa' });
+    if (page === 'doa') { setView({ type: 'doa' }); setSearchDoa(''); }
     if (page === 'dzikir') setView({ type: 'dzikir' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -55,55 +58,69 @@ export default function App() {
 
   const goBack = useCallback(() => {
     if (view.type === 'quran-detail') setView({ type: 'quran-list' });
-    else setView({ type: 'quran-list' }); // Kalau dari doa/dzikir, kembali ke list surah
+    else setView({ type: 'quran-list' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [view.type]);
 
   const dzikirData = activeTab === 'pagi' ? pagi : sore;
 
+  const filteredDoa = useMemo(() => {
+    if (!searchDoa.trim()) return doaList;
+    const q = searchDoa.toLowerCase();
+    return doaList.filter((d) => d.nama.toLowerCase().includes(q) || d.latin.toLowerCase().includes(q) || d.terjemahan.toLowerCase().includes(q));
+  }, [searchDoa]);
+
   return (
-    <div className="app">
-      <Header onLogoClick={goBack} showBack={view.type !== 'quran-list'} onBack={goBack} />
+    <div className={`app ${isLightMode ? 'light-mode' : ''}`}>
+      <Header onLogoClick={goBack} showBack={view.type !== 'quran-list'} onBack={goBack} isLightMode={isLightMode} onToggleTheme={toggleTheme} />
       <main className="main-content">
         
-        {/* MENU STICKY 4 ITEM (Tidak muncul saat baca detail surah) */}
         {view.type !== 'quran-detail' && (
           <div className="sticky-menu">
             <button className={view.type === 'quran-list' ? 'active' : ''} onClick={() => handleNavigate('quran')}>
-              <span className="sm-icon">📖</span>
+              <img src="/icon-quran.png" alt="Qur'an" className="sm-icon-img" />
               <span>Qur'an</span>
             </button>
             <button className={view.type === 'doa' ? 'active' : ''} onClick={() => handleNavigate('doa')}>
-              <span className="sm-icon">🤲</span>
+              <img src="/icon-doa.png" alt="Doa" className="sm-icon-img" />
               <span>Doa</span>
             </button>
             <button className={view.type === 'dzikir' ? 'active' : ''} onClick={() => handleNavigate('dzikir')}>
-              <span className="sm-icon">📿</span>
+              <img src="/icon-dzikir.png" alt="Dzikir" className="sm-icon-img" />
               <span>Dzikir</span>
             </button>
-            <button onClick={() => window.open('https://saweria.co/MHDmedia', '_blank')}>
-              <span className="sm-icon">💚</span>
+            <button onClick={() => window.open('https://saweria.co/@MHDmedia', '_blank')}>
+              <img src="/icon-donasi.png" alt="Donasi" className="sm-icon-img" />
               <span>Donasi</span>
             </button>
           </div>
         )}
 
-        {/* KONTEN UTAMA */}
         {view.type === 'quran-list' && <SurahList surahs={surahs} loading={loading} error={error} onRetry={loadSurahs} onSelectSurah={openSurah} />}
         {view.type === 'quran-detail' && <SurahDetail nomor={view.surahNumber} onSelectSurah={openSurah} />}
 
         {view.type === 'doa' && (
           <div className="content-list">
             <h2 className="page-title">Doa Harian</h2>
-            {doaList.map((doa, i) => (
-              <article key={i} className="content-card">
-                <h3 className="content-card-title">{doa.nama}</h3>
-                <div className="content-card-arab">{doa.arab}</div>
-                <div className="content-card-latin">{doa.latin}</div>
-                <div className="content-card-translation">{doa.terjemahan}</div>
-                <div className="content-card-source">📚 {doa.sumber}</div>
-              </article>
-            ))}
+            <div className="search-container" style={{ marginBottom: '32px' }}>
+              <input type="text" className="search-input" placeholder="Cari doa..." value={searchDoa} onChange={(e) => setSearchDoa(e.target.value)} />
+              <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="20" height="20" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
+              </svg>
+            </div>
+            {filteredDoa.length === 0 ? (
+              <div className="empty-state"><p>Tidak ditemukan doa untuk "{searchDoa}"</p></div>
+            ) : (
+              filteredDoa.map((doa, i) => (
+                <article key={i} className="content-card">
+                  <h3 className="content-card-title">{doa.nama}</h3>
+                  <div className="content-card-arab">{doa.arab}</div>
+                  <div className="content-card-latin">{doa.latin}</div>
+                  <div className="content-card-translation">{doa.terjemahan}</div>
+                  <div className="content-card-source">📚 {doa.sumber}</div>
+                </article>
+              ))
+            )}
           </div>
         )}
 
@@ -123,7 +140,7 @@ export default function App() {
             {dzikirData.items.map((item) => (
               <article key={item.nomor} className="content-card">
                 <h3 className="content-card-title">{item.nomor}. {item.nama}</h3>
-                {item.ketentuan_baca && <div className="content-card-source" style={{ marginBottom: '16px', background: 'rgba(0, 255, 102, 0.05)' }}>🔄 {item.ketentuan_baca}</div>}
+                {item.ketentuan_baca && <div className="content-card-source" style={{ marginBottom: '16px', background: 'var(--accent-glow)' }}>🔄 {item.ketentuan_baca}</div>}
                 <div className="content-card-arab">{item.arab}</div>
                 <div className="content-card-translation">{item.arti}</div>
                 {item.surat && (
@@ -137,9 +154,9 @@ export default function App() {
                     ))}
                   </div>
                 )}
-                {item.faedah && <div className="content-card-source" style={{ marginTop: '12px', background: 'rgba(0, 255, 102, 0.05)' }}>💡 {item.faedah}</div>}
-                {item.keterangan && <div className="content-card-source" style={{ marginTop: '8px', background: 'rgba(100, 160, 255, 0.05)', color: 'var(--text-secondary)' }}>📌 {item.keterangan}</div>}
-                {item.pahala_berlimpah && <div className="content-card-source" style={{ marginTop: '8px', background: 'rgba(0, 255, 102, 0.05)' }}>🌟 {item.pahala_berlimpah}</div>}
+                {item.faedah && <div className="content-card-source" style={{ marginTop: '12px', background: 'var(--accent-glow)' }}>💡 {item.faedah}</div>}
+                {item.keterangan && <div className="content-card-source" style={{ marginTop: '8px', background: 'rgba(100, 160, 255, 0.1)', color: 'var(--text-secondary)' }}>📌 {item.keterangan}</div>}
+                {item.pahala_berlimpah && <div className="content-card-source" style={{ marginTop: '8px', background: 'var(--accent-glow)' }}>🌟 {item.pahala_berlimpah}</div>}
               </article>
             ))}
             {dzikirData.footer && <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '13px', color: 'var(--text-muted)' }}>{dzikirData.footer}</div>}
@@ -150,4 +167,4 @@ export default function App() {
       <Footer />
     </div>
   );
-}
+      }
