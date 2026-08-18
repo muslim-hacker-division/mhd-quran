@@ -1228,15 +1228,6 @@ body::after {
   height: 24px;
   object-fit: contain;
   transition: var(--transition);
-  filter: grayscale(100%) opacity(0.6); /* Biar default abu-abu */
-}
-
-.sticky-menu button:hover .sm-icon-img {
-  filter: grayscale(0%) opacity(1);
-}
-
-.sticky-menu button.active .sm-icon-img {
-  filter: grayscale(0%) opacity(1) brightness(0) invert(31%) sepia(100%) saturate(1500%) hue-rotate(104deg) brightness(95%) contrast(101%); /* Otomatis jadi warna accent */
 }
 
 /* Light mode khusus ikon active (karena warna accent beda) */
