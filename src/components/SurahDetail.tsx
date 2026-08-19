@@ -15,7 +15,8 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
   const [tafsirMap, setTafsirMap] = useState<Map<number, string>>(new Map());
   const [expandedTafsir, setExpandedTafsir] = useState<number | null>(null);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  // Menggunakan elemen HTML audio yang tersembunyi 
+  const audioEl = useRef<HTMLAudioElement | null>(null);
   const [playingAyah, setPlayingAyah] = useState<number | null>(null);
 
   useEffect(() => {
@@ -58,39 +59,35 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
 
     return () => {
       cancelled = true;
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
+      if (audioEl.current) {
+        audioEl.current.pause();
+        audioEl.current.src = '';
       }
     };
   }, [nomor]);
 
   const playAyah = useCallback(
     (ayahNumber: number, audioUrl: string) => {
-      /* Jika ayah yang sama sedang diputar → pause */
+      if (!audioEl.current) return;
+
       if (playingAyah === ayahNumber) {
-        audioRef.current?.pause();
+        audioEl.current.pause();
         setPlayingAyah(null);
         return;
       }
 
-      /* Hentikan audio sebelumnya */
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-
-      const audio = new Audio(audioUrl);
-      audioRef.current = audio;
+      audioEl.current.src = audioUrl;
       setPlayingAyah(ayahNumber);
 
-      audio.play().catch(() => {
+      audioEl.current.play().catch(() => {
         setPlayingAyah(null);
       });
 
-      audio.onended = () => {
+      const handleEnded = () => {
         setPlayingAyah(null);
+        audioEl.current?.removeEventListener('ended', handleEnded);
       };
+      audioEl.current.addEventListener('ended', handleEnded);
     },
     [playingAyah]
   );
@@ -139,6 +136,9 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
 
   return (
     <>
+      {/* Elemen audio tersembunyi untuk stabilitas HP */}
+      <audio ref={audioEl} preload="auto" style={{ display: 'none' }} />
+
       {/* Header surah */}
       <div className="surah-detail-header">
         <div className="surah-detail-arabic">{detail.nama}</div>
@@ -152,7 +152,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
         </div>
       </div>
 
-      {/* Bismillah — tidak ditampilkan di Al-Fatihah dan At-Tawbah */}
+      {/* Bismillah */}
       {detail.nomor !== 9 && detail.nomor !== 1 && (
         <div className="bismillah">بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ</div>
       )}
@@ -164,8 +164,8 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
           ayah={ayah}
           isPlaying={playingAyah === ayah.nomorAyat}
           onPlay={() => {
-          const url = ayah.audio['01'];
-          if (url) playAyah(ayah.nomorAyat, url);
+            const url = ayah.audio['01']; // Qari Abdullah Al-Juhany
+            if (url) playAyah(ayah.nomorAyat, url);
           }}
           tafsirText={tafsirMap.get(ayah.nomorAyat)}
           isTafsirOpen={expandedTafsir === ayah.nomorAyat}
@@ -173,30 +173,20 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
         />
       ))}
 
-      {/* Navigasi surah sebelum/sesudah */}
+      {/* Navigasi */}
       <nav className="surah-nav" aria-label="Navigasi surah">
         {detail.prev ? (
-          <button
-            className="surah-nav-btn"
-            onClick={() => onSelectSurah(detail.prev!.nomor)}
-          >
+          <button className="surah-nav-btn" onClick={() => onSelectSurah(detail.prev!.nomor)}>
             <div className="surah-nav-label">Sebelumnya</div>
-            <div className="surah-nav-name">
-              {detail.prev.namaLatin} — {detail.prev.nama}
-            </div>
+            <div className="surah-nav-name">{detail.prev.namaLatin} — {detail.prev.nama}</div>
           </button>
         ) : (
           <div />
         )}
         {detail.next ? (
-          <button
-            className="surah-nav-btn"
-            onClick={() => onSelectSurah(detail.next!.nomor)}
-          >
+          <button className="surah-nav-btn" onClick={() => onSelectSurah(detail.next!.nomor)}>
             <div className="surah-nav-label">Selanjutnya</div>
-            <div className="surah-nav-name">
-              {detail.next.namaLatin} — {detail.next.nama}
-            </div>
+            <div className="surah-nav-name">{detail.next.namaLatin} — {detail.next.nama}</div>
           </button>
         ) : (
           <div />
