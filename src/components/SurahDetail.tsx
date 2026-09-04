@@ -10,7 +10,7 @@ interface QueueItem {
 
 interface SurahDetailProps {
   nomor: number;
-  onSelectSurah: number => void;
+  onSelectSurah: (nomor: number) => void;
 }
 
 export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
