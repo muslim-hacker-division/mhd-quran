@@ -229,6 +229,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
             </button>
           ) : <div />}
         </nav>
+      </div>
     </>
   );
 }
