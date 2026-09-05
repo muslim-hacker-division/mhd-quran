@@ -26,6 +26,14 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
   const autoPlayRef = useRef<QueueItem[]>([]);
   const isAutoPlayingRef = useRef(false);
 
+  const stopAutoPlay = useCallback(() => {
+    if (audioEl.current) audioEl.current.pause();
+    setIsAutoPlaying(false);
+    isAutoPlayingRef.current = false;
+    autoPlayRef.current = [];
+    setPlayingAyah(null);
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
@@ -68,14 +76,6 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
     };
   }, [nomor, stopAutoPlay]);
 
-  const stopAutoPlay = useCallback(() => {
-    if (audioEl.current) audioEl.current.pause();
-    setIsAutoPlaying(false);
-    isAutoPlayingRef.current = false;
-    autoPlayRef.current = [];
-    setPlayingAyah(null);
-  }, []);
-
   const playAyah = useCallback(
     (ayahNumber: number, audioUrl: string, isAuto: boolean = false) => {
       if (!audioEl.current) return;
@@ -99,7 +99,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
             if (url) return { ayahNumber: a.nomorAyat, url };
             return null;
           })
-          .filter(Boolean);
+          .filter((item): item is QueueItem => item !== null);
 
         if (queue.length === 0) return;
 
@@ -118,7 +118,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
 
       const handleEnded = () => {
         const next = autoPlayRef.current.shift();
-        if (next) {
+        if (next && audioEl.current) {
           setPlayingAyah(next.ayahNumber);
           audioEl.current.src = next.url;
           audioEl.current.play().catch(() => stopAutoPlay());
@@ -126,7 +126,9 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
           stopAutoPlay();
         }
       };
-      audioEl.current.addEventListener('ended', handleEnded);
+      if (audioEl.current) {
+        audioEl.current.addEventListener('ended', handleEnded);
+      }
     },
     [playingAyah, detail, stopAutoPlay]
   );
@@ -167,11 +169,11 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
   }
 
   const isMakkiyah = detail.tempatTurun === 'Mekah';
+  const firstAyatAudio = detail.ayat[0]?.audio['01'];
 
   return (
     <>
       <audio ref={audioEl} preload="auto" style={{ display: 'none' }} />
-
       <div className="surah-detail-header">
         <div className="surah-detail-arabic">{detail.nama}</div>
         <h2 className="surah-detail-latin">{detail.namaLatin}</h2>
@@ -182,15 +184,15 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
           </span>
           <span className="surah-detail-info">{detail.jumlahAyat} Ayat</span>
         </div>
-        
-        {detail.nomor !== 9 && detail.nomor !== 1 && (
+
+        {detail.nomor !== 9 && detail.nomor !== 1 && firstAyatAudio && (
           <button
             className="btn-retry"
             onClick={() => {
               if (isAutoPlaying) {
                 stopAutoPlay();
               } else {
-                playAyah(1, detail.ayat[0].audio['01'], true);
+                playAyah(1, firstAyatAudio, true);
               }
             }}
             style={{ marginTop: '16px', fontSize: '14px', display: 'block', width: '100%', maxWidth: '500px', margin: '0 auto' }}
@@ -203,17 +205,20 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
           <div className="bismillah">بِسْمِ اللَّهِ الرَّحْمَـٰنِ الرَّحِيمِ</div>
         )}
 
-        {(detail.ayat || []).map((ayah) => (
-          <AyatCard
-            key={ayah.nomorAyat}
-            ayah={ayah}
-            isPlaying={playingAyah === ayah.nomorAyat}
-            onPlay={() => playAyah(ayah.nomorAyat, ayah.audio['01'])}
-            tafsirText={tafsirMap.get(ayah.nomorAyat)}
-            isTafsirOpen={expandedTafsir === ayah.nomorAyat}
-            onToggleTafsir={() => toggleTafsir(ayah.nomorAyat)}
-          />
-        ))}
+        {(detail.ayat || []).map((ayah) => {
+          const audioUrl = ayah.audio['01'];
+          return (
+            <AyatCard
+              key={ayah.nomorAyat}
+              ayah={ayah}
+              isPlaying={playingAyah === ayah.nomorAyat}
+              onPlay={() => audioUrl && playAyah(ayah.nomorAyat, audioUrl)}
+              tafsirText={tafsirMap.get(ayah.nomorAyat)}
+              isTafsirOpen={expandedTafsir === ayah.nomorAyat}
+              onToggleTafsir={() => toggleTafsir(ayah.nomorAyat)}
+            />
+          );
+        })}
 
         <nav className="surah-nav" aria-label="Navigasi surah">
           {detail.prev ? (
