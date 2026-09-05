@@ -169,7 +169,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
   }
 
   const isMakkiyah = detail.tempatTurun === 'Mekah';
-  const firstAyatAudio = detail.ayat[0]?.audio['01'];
+  const firstAyatAudio = detail.ayat?.[0]?.audio?.['01'];
 
   return (
     <>
@@ -206,7 +206,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
         )}
 
         {(detail.ayat || []).map((ayah) => {
-          const audioUrl = ayah.audio['01'];
+          const audioUrl = ayah.audio?.['01'];
           return (
             <AyatCard
               key={ayah.nomorAyat}
