@@ -208,7 +208,7 @@ export function SurahDetail({ nomor, onSelectSurah }: SurahDetailProps) {
             key={ayah.nomorAyat}
             ayah={ayah}
             isPlaying={playingAyah === ayah.nomorAyat}
-            onPlay={() => playAyah(ayah.nomorAyah, ayah.audio['01'])}
+            onPlay={() => playAyah(ayah.nomorAyat, ayah.audio['01'])}
             tafsirText={tafsirMap.get(ayah.nomorAyat)}
             isTafsirOpen={expandedTafsir === ayah.nomorAyat}
             onToggleTafsir={() => toggleTafsir(ayah.nomorAyat)}
