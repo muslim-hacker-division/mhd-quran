@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { Surah } from './types';
 import { fetchAllSurahs } from './api';
 import { Header } from './components/Header';
@@ -8,8 +8,8 @@ import { Footer } from './components/Footer';
 
 // Import JSON
 import doaData from './doa_harian.json';
-import pagiDataRaw from './dzikir_pagi_up.json';
-import soreDataRaw from './dzikir_petang_up.json';
+import pagiDataRaw from './dzikir_pagi.json';
+import soreDataRaw from './dzikir_petang.json';
 
 // Types Sementara
 interface DoaItem { nama: string; arab: string; latin: string; terjemahan: string; sumber: string; }
@@ -37,7 +37,36 @@ export default function App() {
   const [searchDoa, setSearchDoa] = useState('');
   const [isLightMode, setIsLightMode] = useState(false);
 
+  // Audio Dzikir
+  const dzikirAudioRef = useRef<HTMLAudioElement | null>(null);
+  const [playingDzikir, setPlayingDzikir] = useState<'pagi' | 'petang' | null>(null);
+
   useEffect(() => { loadSurahs(); }, []);
+
+  // Cleanup audio saat pindah halaman
+  useEffect(() => {
+    return () => {
+      if (dzikirAudioRef.current) {
+        dzikirAudioRef.current.pause();
+      }
+    };
+  }, []);
+
+  const toggleTheme = useCallback(() => { setIsLightMode((prev) => !prev); }, []);
+
+  const toggleDzikir = useCallback((type: 'pagi' | 'petang') => {
+    if (!dzikirAudioRef.current) return;
+    const url = type === 'pagi' ? '/dzikir-pagi.mp3' : '/dzikir-petang.mp3';
+
+    if (playingDzikir === type) {
+      dzikirAudioRef.current.pause();
+      setPlayingDzikir(null);
+    } else {
+      dzikirAudioRef.current.src = url;
+      setPlayingDzikir(type);
+      dzikirAudioRef.current.play().catch(() => setPlayingDzikir(null));
+    }
+  }, [playingDzikir]);
 
   const loadSurahs = async () => {
     try { setLoading(true); setError(null); const data = await fetchAllSurahs(); setSurahs(data); }
@@ -45,12 +74,10 @@ export default function App() {
     finally { setLoading(false); }
   };
 
-  const toggleTheme = useCallback(() => { setIsLightMode((prev) => !prev); }, []);
-
   const handleNavigate = useCallback((page: 'quran' | 'doa' | 'dzikir') => {
     if (page === 'quran') setView({ type: 'quran-list' });
-    if (page === 'doa') { setView({ type: 'doa' }); setSearchDoa(''); }
-    if (page === 'dzikir') setView({ type: 'dzikir' });
+    if (page === 'doa') { setView({ type: 'doa' }); setSearchDoa(''); setPlayingDzikir(null); dzikirAudioRef.current?.pause(); }
+    if (page === 'dzikir') { setView({ type: 'dzikir' }); setPlayingDzikir(null); dzikirAudioRef.current?.pause(); }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
@@ -127,10 +154,35 @@ export default function App() {
         {view.type === 'dzikir' && (
           <div className="content-list">
             <h2 className="page-title">Dzikir Pagi & Sore</h2>
+            
+            {/* Tombol Audio Dzikir */}
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '24px' }}>
+              <button 
+                onClick={() => toggleDzikir('pagi')} 
+                className={`btn-retry ${playingDzikir === 'pagi' ? 'playing' : ''}`}
+                style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <span>{playingDzikir === 'pagi' ? '⏹' : '⏺'}</span>
+                Dzikir Pagi (Audio)
+              </button>
+              <button 
+                onClick={() => toggleDzikir('petang')} 
+                className={`btn-retry ${playingDzikir === 'petang' ? 'playing' : ''}`}
+                style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <span>{playingDzikir === 'petang' ? '⏹' : '⏺'}</span>
+                Dzikir Petang (Audio)
+              </button>
+            </div>
+
             <div className="tab-container">
               <button className={`tab-btn ${activeTab === 'pagi' ? 'active' : ''}`} onClick={() => setActiveTab('pagi')}>☀️ Pagi</button>
               <button className={`tab-btn ${activeTab === 'sore' ? 'active' : ''}`} onClick={() => setActiveTab('sore')}>🌙 Sore</button>
             </div>
+            
+            {/* Elemen Audio Tersembunyi */}
+            <audio ref={dzikirAudioRef} preload="none" style={{ display: 'none' }} />
+
             {dzikirData.mukaddimah && (
               <div style={{ textAlign: 'center', marginBottom: '32px' }}>
                 <div className="content-card-arab" style={{ display: 'inline-block', border: 'none', padding: 0, marginBottom: '8px' }}>{dzikirData.mukaddimah.teks_arab}</div>
@@ -167,4 +219,4 @@ export default function App() {
       <Footer />
     </div>
   );
-      }
+}
