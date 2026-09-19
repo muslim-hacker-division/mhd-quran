@@ -29,7 +29,7 @@ export const Header = memo(function Header({ onLogoClick, showBack, onBack, isLi
           aria-label="MHD Qur'an — Kembali ke beranda"
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onLogoClick(); } }}
         >
-          <img src="/logoMHD.png" alt="Logo MHD" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+          <img src="/logo_update.png" alt="Logo MHD" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
           <div className="brand-text">QUR<span>'</span>AN</div>
         </div>
         
