@@ -1,3 +1,50 @@
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-retry:hover {
+  background: var(--accent-soft);
+  box-shadow: 0 0 28px var(--accent-glow-strong);
+  transform: translateY(-1px);
+}
+
+.btn-retry:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.btn-retry svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ========== EMPTY STATE ========== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.empty-state svg {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.empty-state p {
+  font-size: 15px;
+}
+
+/* ========== FOOTER ========== */
 .footer {
   margin-top: auto;
   border-top: 1px solid var(--border);
@@ -44,38 +91,57 @@
   color: var(--text-secondary);
 }
 
-.footer-socials {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 10px 0 12px;
-}
-
-.footer-social-link {
-  position: relative;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  transition: var(--transition);
-}
-
-.footer-social-link:hover,
-.footer-social-link:focus-visible {
-  color: var(--accent);
-  text-shadow: 0 0 14px var(--accent-glow-md);
-}
-
-.footer-social-link:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
 .footer-text {
   font-size: 12px;
   color: var(--text-muted);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px var(--accent-glow-md);
+  }
+  50% {
+    box-shadow: 0 0 24px var(--accent-glow-strong);
+  }
+}
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
 }
