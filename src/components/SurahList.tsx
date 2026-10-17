@@ -51,11 +51,14 @@ export function SurahList({ surahs, loading, error, onRetry, onSelectSurah }: Su
     <>
       {/* Hero */}
       <section className="hero">
-        <h1 className="hero-title">AL-QUR&apos;AN</h1>
-        <p className="hero-subtitle">
-          Baca, dengarkan, dan renungkan setiap ayat Al-Qur&apos;an dengan tampilan modern
-        </p>
-      </section>
+  <h1 className="hero-title">AL-QUR&apos;AN</h1>
+  <p 
+    className="hero-subtitle"
+    data-text="Baca, dengarkan, dan renungkan setiap ayat Al-Qur'an dengan tampilan modern"
+  >
+    Baca, dengarkan, dan renungkan setiap ayat Al-Qur&apos;an dengan tampilan modern
+  </p>
+</section>
 
       {/* Pencarian */}
       <div className="search-container">
