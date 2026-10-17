@@ -1234,3 +1234,95 @@ body::after {
 .app.light-mode .sticky-menu button.active .sm-icon-img {
   filter: grayscale(0%) opacity(1) brightness(0) invert(38%) sepia(98%) saturate(1500%) hue-rotate(106deg) brightness(96%) contrast(95%);
   }
+
+/* ============================================
+   HERO SUBTITLE GLITCH EFFECT
+   ============================================ */
+.hero-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.7;
+  position: relative;
+  display: inline-block;
+  /* Animasi bergeser/getar utama */
+  animation: glitchMove 3s infinite ease-in-out;
+}
+
+/* Layer Duplikat Atas & Bawah untuk Efek Distorsi Warna */
+.hero-subtitle::before,
+.hero-subtitle::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.hero-subtitle::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--accent);
+  clip-path: inset(24% 0 56% 0);
+  animation: glitchTop 2s infinite linear alternate-reverse;
+}
+
+.hero-subtitle::after {
+  left: -2px;
+  text-shadow: 2px 0 var(--danger);
+  clip-path: inset(62% 0 12% 0);
+  animation: glitchBottom 1.5s infinite linear alternate-reverse;
+}
+
+/* Keyframes untuk Gerakan Teks */
+@keyframes glitchMove {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-2px, 1px);
+  }
+  40% {
+    transform: translate(2px, -1px);
+  }
+  60% {
+    transform: translate(-1px, -1px);
+  }
+  80% {
+    transform: translate(1px, 2px);
+  }
+}
+
+@keyframes glitchTop {
+  0% {
+    clip-path: inset(10% 0 85% 0);
+    transform: translate(-2px, -1px);
+  }
+  50% {
+    clip-path: inset(60% 0 10% 0);
+    transform: translate(2px, 1px);
+  }
+  100% {
+    clip-path: inset(30% 0 55% 0);
+    transform: translate(-1px, 1px);
+  }
+}
+
+@keyframes glitchBottom {
+  0% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(2px, 1px);
+  }
+  50% {
+    clip-path: inset(15% 0 70% 0);
+    transform: translate(-2px, -1px);
+  }
+  100% {
+    clip-path: inset(45% 0 30% 0);
+    transform: translate(1px, -1px);
+  }
+}
