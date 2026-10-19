@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import type { Surah } from '../types';
 
 interface SurahListProps {
@@ -11,6 +11,34 @@ interface SurahListProps {
 
 export function SurahList({ surahs, loading, error, onRetry, onSelectSurah }: SurahListProps) {
   const [search, setSearch] = useState('');
+
+  /* --- Efek Typewriter ala After Effects --- */
+  const fullText = "Baca, dengarkan, dan renungkan setiap ayat Al-Qur'an dengan tampilan modern";
+  const [displayText, setDisplayText] = useState('');
+  const [isGlitched, setIsGlitched] = useState(false);
+
+  useEffect(() => {
+    let index = 0;
+    setDisplayText('');
+
+    const timer = setInterval(() => {
+      if (index < fullText.length) {
+        setDisplayText(fullText.slice(0, index + 1));
+        
+        // Pemicu kilatan glitch acak ala After Effects saat mengetik
+        if (Math.random() > 0.6) {
+          setIsGlitched(true);
+          setTimeout(() => setIsGlitched(false), 80);
+        }
+        
+        index++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 45); // Kecepatan mengetik (milidetik per huruf)
+
+    return () => clearInterval(timer);
+  }, []);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return surahs;
@@ -51,14 +79,15 @@ export function SurahList({ surahs, loading, error, onRetry, onSelectSurah }: Su
     <>
       {/* Hero */}
       <section className="hero">
-  <h1 className="hero-title">AL-QUR&apos;AN</h1>
-  <p 
-    className="hero-subtitle"
-    data-text="Baca, dengarkan, dan renungkan setiap ayat Al-Qur'an dengan tampilan modern"
-  >
-    Baca, dengarkan, dan renungkan setiap ayat Al-Qur&apos;an dengan tampilan modern
-  </p>
-</section>
+        <h1 className="hero-title">AL-QUR&apos;AN</h1>
+        <p 
+          className={`hero-subtitle typewriter ${isGlitched ? 'ae-glitch' : ''}`}
+          data-text={displayText}
+        >
+          {displayText}
+          <span className="cursor-blink">|</span>
+        </p>
+      </section>
 
       {/* Pencarian */}
       <div className="search-container">
