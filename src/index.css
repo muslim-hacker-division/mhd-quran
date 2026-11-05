@@ -204,7 +204,7 @@ body::after {
 /* ========== HERO ========== */
 .hero {
   text-align: center;
-  padding: 48px 0 36px;
+  padding: 36px 0 24px;
   animation: fadeInUp 0.6s ease-out;
 }
 
@@ -218,20 +218,14 @@ body::after {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.hero-subtitle {
-  font-size: 15px;
-  color: var(--text-secondary);
-  max-width: 480px;
-  margin: 0 auto;
-  line-height: 1.7;
+  /* Tambahan efek neon glow agar judul semakin hidup */
+  filter: drop-shadow(0 0 16px rgba(0, 255, 102, 0.35));
 }
 
 /* ========== SEARCH ========== */
 .search-container {
   max-width: 540px;
-  margin: 0 auto 40px;
+  margin: 12px auto 36px;
   position: relative;
   animation: fadeInUp 0.6s ease-out 0.1s both;
 }
@@ -985,51 +979,7 @@ body::after {
   }
 }
 
-/* ========== HOME MENU GRID DIHAPUS ========== */
-/*.menu-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  max-width: 500px;
-  margin: 40px auto;
-  animation: fadeInUp 0.5s ease-out;
-}
-
-.menu-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 32px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: var(--transition);
-  color: var(--text);
-  font-family: var(--font-ui);
-}
-
-.menu-card:hover {
-  border-color: var(--accent);
-  background: var(--bg-card-hover);
-  box-shadow: 0 0 30px var(--accent-glow-md);
-  transform: translateY(-4px);
-}
-
-.menu-icon {
-  font-size: 36px;
-  line-height: 1;
-}
-
-.menu-label {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--accent);
-} */
-
-/* ========== CONTENT LIST (DOA & DZIKIR) ========== */
+/* ========== CONTENT LIST (DOA & BERDZIKIR) ========== */
 .page-title {
   font-family: var(--font-display);
   font-size: 24px;
@@ -1139,7 +1089,7 @@ body::after {
 /* ========== STICKY MENU (4 ITEM KECIL) ========== */
 .sticky-menu {
   position: sticky;
-  top: 56px; /* Sesuaikan tinggi header kamu (mobile 56px, desktop 64px) */
+  top: 56px;
   z-index: 50;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1184,10 +1134,9 @@ body::after {
   line-height: 1;
 }
 
-/* Atur ulang tinggi sticky menu jika di layar besar */
 @media (min-width: 768px) {
   .sticky-menu {
-    top: 64px; /* Tinggi header desktop */
+    top: 64px;
   }
 }
 
@@ -1199,7 +1148,7 @@ body::after {
   --bg-card-hover: #f8f8fc;
   --border: #e0e0e5;
   --border-glow: rgba(0, 153, 68, 0.3);
-  --accent: #009944; /* Hijau lebih gelap supaya tidak silau di latar terang */
+  --accent: #009944;
   --accent-soft: #008838;
   --accent-glow: rgba(0, 153, 68, 0.08);
   --accent-glow-md: rgba(0, 153, 68, 0.15);
@@ -1208,7 +1157,6 @@ body::after {
   --text-secondary: #555566;
   --text-muted: #888899;
   --danger: #ff2244;
-  /* Menutupi background gelap dari body */
   background-color: var(--bg); 
 }
 
@@ -1230,26 +1178,26 @@ body::after {
   transition: var(--transition);
 }
 
-/* Light mode khusus ikon active (karena warna accent beda) */
 .app.light-mode .sticky-menu button.active .sm-icon-img {
   filter: grayscale(0%) opacity(1) brightness(0) invert(38%) sepia(98%) saturate(1500%) hue-rotate(106deg) brightness(96%) contrast(95%);
-  }
+}
 
 /* ============================================
-   AFTER EFFECTS TYPEWRITER + GLITCH FLASH
+   AFTER EFFECTS TYPEWRITER + GLITCH FLASH (Sempurna & Terang)
    ============================================ */
 .hero-subtitle.typewriter {
   font-size: 15px;
-  color: var(--text-secondary);
+  color: #c0c0d4;
   max-width: 520px;
   margin: 0 auto;
   line-height: 1.7;
   position: relative;
   display: inline-block;
-  min-height: 2.6em; /* Mencegah layout meloncat saat mengetik */
+  min-height: 2.6em; 
+  text-shadow: 0 0 10px rgba(0, 255, 102, 0.15);
 }
 
-/* Kursor mengetik kedap-kedip */
+/* Kursor mengetik kedap-kedip bukan karena centil yaa, tolong dicatat */
 .cursor-blink {
   display: inline-block;
   margin-left: 2px;
@@ -1263,13 +1211,13 @@ body::after {
   50% { opacity: 0; }
 }
 
-/* Kilatan Efek After Effects saat huruf muncul */
+/* Kilatan Efek After Effects saat huruf muncul BUKAN KARENA MATA MU MINUS, Heheh bercanda boss */
 .hero-subtitle.ae-glitch {
   text-shadow: 
     -2px 0 var(--accent), 
      2px 0 var(--danger),
-     0 0 8px var(--accent-glow-strong);
-  transform: skewX(-4deg);
+     0 0 12px var(--accent-glow-strong);
+  transform: skewX(-3deg);
 }
 
 .hero-subtitle.ae-glitch::before {
