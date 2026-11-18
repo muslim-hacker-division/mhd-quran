@@ -1230,3 +1230,49 @@ body::after {
   clip-path: inset(30% 0 40% 0);
   opacity: 0.9;
 }
+
+/* ========== EFEK TAMBAHAN UNTUK MENU IKON (STICKY MENU / TOP MENU) ========== */
+
+/* Styling dasar tombol menu */
+.sticky-menu button,
+.menu-card {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efek saat kursor diarahkan (Hover) */
+.sticky-menu button:hover {
+  transform: translateY(-4px);
+  color: var(--accent);
+  text-shadow: 0 0 12px var(--accent-glow-strong);
+}
+
+/* Efek Neon Glow khusus */
+.sticky-menu button.active {
+  background: var(--accent-glow);
+  border-color: rgba(0, 255, 102, 0.3);
+  box-shadow: 0 0 20px rgba(0, 255, 102, 0.15);
+  animation: iconGlowPulse 2s infinite ease-in-out;
+}
+
+/* Animasi */
+@keyframes iconGlowPulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(0, 255, 102, 0.35);
+  }
+}
+
+/* Mempertegas ikon gambar*/
+.sticky-menu button img,
+.sm-icon-img {
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.sticky-menu button:hover img,
+.sticky-menu button:hover .sm-icon-img {
+  transform: scale(1.1); 
+  filter: drop-shadow(0 0 8px var(--accent));
+}
