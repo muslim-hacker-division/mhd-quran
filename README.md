@@ -33,8 +33,8 @@
 
 ## 🚀 CORE FEATURES
 
-* **[x] Neon Cyberpunk Theme:** Tampilan gelap gulita (`#0a0a0a`) dengan aksen hijau neon khas terminal elit (`#00ff66`).
-* **[x] Multi-Language Support:** Pilihan terjemahan dalam berbagai bahasa secara dinamis.
+* **[x] Neon Cyberpunk Theme:** Tampilan gelap gulita (`#0a0a0a`) dengan aksen hijau neon terminal (`#00ff66`).
+* **[x] Multi-Language Support:** Pilihan terjemahan dalam berbagai bahasa secara dinamis. (`#Fitur ini belum tersedia`)
 * **[x] Real-time API Integration:** Mengambil data surat dan ayat langsung dari server publik secara instan tanpa membebani penyimpanan lokal.
 * **[x] Responsive & Lightweight:** Dioptimalkan untuk kecepatan akses tinggi di berbagai perangkat (Mobile & Desktop).
 * **[x] Clean Modular Architecture:** Struktur komponen yang terisolasi dengan rapi (`components/`, `api.ts`, `types.ts`).
